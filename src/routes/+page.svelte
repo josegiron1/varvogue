@@ -54,7 +54,7 @@
 	});
 </script>
 
-<h1>VarVogue</h1>
+<h1>VarVogue.</h1>
 <div
 	class="flex flex-col items-center justify-center gap-6 my-auto"
 >
