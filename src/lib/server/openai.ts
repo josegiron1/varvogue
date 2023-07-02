@@ -33,7 +33,7 @@ export async function getChatCompletion({
 				Description: ${description}
 				Naming Convention: ${namingConvention}
 				#
-				Your task is to suggest a single-word title, just one unique and concise term. Please approach this with an engineering mindset; think functionality, clarity, and simplicity. The response should only be a single word, the name recommended.`
+				Your task is to suggest a single-word title, just one unique and concise term. Please approach this with an engineering mindset; think functionality, clarity, and simplicity. Also use clean code recommendation. The response should only be a single word, the name recommended.`
 			}
 		]
 	});
