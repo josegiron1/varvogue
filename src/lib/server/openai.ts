@@ -11,10 +11,12 @@ const openai = new OpenAIApi(configuration);
 
 export async function getChatCompletion({
 	name,
-	description
+	description,
+	namingConvention
 }: {
 	name: string;
 	description: string;
+	namingConvention: string;
 }) {
 	console.log('getChatCompletion', {
 		name,
@@ -29,6 +31,7 @@ export async function getChatCompletion({
 				#
 				Name: ${name}
 				Description: ${description}
+				Naming Convention: ${namingConvention}
 				#
 				Your task is to suggest a single-word title, just one unique and concise term. Please approach this with an engineering mindset; think functionality, clarity, and simplicity. The response should only be a single word, the name recommended.`
 			}
