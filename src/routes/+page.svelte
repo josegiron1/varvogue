@@ -65,7 +65,9 @@
 		Establishing names for your variables,
 		functions, classes, and methods...
 	</h1>
-	<div class="flex justify-between w-3/4">
+	<div
+		class="flex md:flex-row flex-col justify-between w-3/4"
+	>
 		<select
 			name="name"
 			class="select select-bordered w-full max-w-xs text-lg"
