@@ -66,7 +66,7 @@
 		functions, classes, and methods...
 	</h1>
 	<div
-		class="flex md:flex-row flex-col justify-between w-3/4"
+		class="flex md:flex-row flex-col gap-3 md:gap-0 justify-between w-3/4"
 	>
 		<select
 			name="name"
