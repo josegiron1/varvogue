@@ -24,6 +24,7 @@
 
 	const generateName = async () => {
 		loading = true;
+		console.log(namingConvention);
 		const response = await fetch(
 			'/api/recommendation',
 			{
@@ -33,7 +34,8 @@
 				},
 				body: JSON.stringify({
 					name,
-					description
+					description,
+					namingConvention
 				})
 			}
 		);
@@ -49,7 +51,6 @@
 		loading = false;
 		updateBackendCallCookie();
 	};
-
 	onMount(() => {
 		document.cookie = `backend_calls=0`;
 	});
@@ -82,16 +83,21 @@
 			<option>Variable</option>
 		</select>
 		<select
-			name="name"
+			name="namingConvention"
 			class="select select-bordered w-full max-w-xs text-lg"
 			bind:value={namingConvention}
 		>
 			<option disabled selected
 				>Naming Convention</option
 			>
-			<option>Camel Case</option>
-			<option>Pascal Case</option>
-			<option>Snake Case</option>
+			<option value="camelCase">Camel Case</option
+			>
+			<option value="PascalCase"
+				>Pascal Case</option
+			>
+			<option value="snake_case"
+				>Snake Case</option
+			>
 		</select>
 	</div>
 

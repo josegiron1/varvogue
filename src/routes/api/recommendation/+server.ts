@@ -9,19 +9,26 @@ export async function POST({
 	cookies: any;
 }) {
 	const data = await request.json();
-	const { name, description } = data;
+	const { name, description, namingConvention } =
+		data;
 
-	if (!name || !description) {
+	if (
+		!name ||
+		!description ||
+		!namingConvention
+	) {
 		return json({
 			status: 400,
 			body: {
-				error: 'Missing name or description'
+				error:
+					'Missing name or description or namingConvention'
 			}
 		});
 	}
 	const res = await getChatCompletion({
 		name: name.trim(),
-		description: description.trim()
+		description: description.trim(),
+		namingConvention: namingConvention.trim()
 	});
 	if (!res || !res?.data || res.status !== 200) {
 		return json({
