@@ -1,59 +1,44 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	let name: string;
 	let namingConvention: string;
 	let description = '';
 	let res: string;
 	let loading = false;
-
-	const getCookieValue = (name: string) =>
-		document.cookie
-			.match(
-				'(^|;)\\s*' + name + '\\s*=\\s*([^;]+)'
-			)
-			?.pop() || '';
-
-	const updateBackendCallCookie = () => {
-		let currentCalls = parseInt(
-			getCookieValue('backend_calls') || '0'
-		);
-		document.cookie = `backend_calls=${
-			currentCalls + 1
-		}`;
-	};
+	let error: string;
 
 	const generateName = async () => {
 		loading = true;
-		console.log(namingConvention);
-		const response = await fetch(
-			'/api/recommendation',
-			{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					name,
-					description,
-					namingConvention
-				})
-			}
-		);
-		if (!response.ok) {
-			res = 'Error fetching recommendation';
-			console.error(
-				'Error fetching recommendation'
+		try {
+			const response = await fetch(
+				'/api/recommendation',
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						name,
+						description,
+						namingConvention
+					})
+				}
 			);
-		}
 
-		const data = await response.json();
-		res = data.body.response.content;
-		loading = false;
-		updateBackendCallCookie();
+			if (!response.ok) {
+				throw new Error(
+					'Error fetching recommendation'
+				);
+			}
+
+			const data = await response.json();
+			res = data.body.response.content;
+		} catch (err: any) {
+			error = err.message;
+			console.error(err);
+		} finally {
+			loading = false;
+		}
 	};
-	onMount(() => {
-		document.cookie = `backend_calls=0`;
-	});
 </script>
 
 <h1 class="text-center text-6xl">VarVogue</h1>
@@ -114,14 +99,19 @@
 	>
 		{#if loading}
 			<span class="loading loading-spinner" />
-			loading
+			Please wait...
 		{:else}
 			Submit
 		{/if}
 	</button>
-	<div class="text-lg">
-		{#if res != undefined}
+	{#if error}
+		<div class="text-lg text-red-500">
+			An error occurred: {error}
+		</div>
+	{/if}
+	{#if res != undefined}
+		<div class="text-lg">
 			My recommendation is: {res}
-		{/if}
-	</div>
+		</div>
+	{/if}
 </div>
