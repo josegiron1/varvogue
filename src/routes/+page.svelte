@@ -1,12 +1,19 @@
 <script lang="ts">
-	let name: string;
-	let namingConvention: string;
-	let description = '';
+	let propertiesForName: {
+		name: string;
+		namingConvention: string;
+		description: string;
+	} = {
+		name: 'What are you creating...',
+		namingConvention: 'Naming Convention',
+		description: ''
+	};
 	let res: string;
 	let loading = false;
 	let error: string;
 
 	const generateName = async () => {
+		error = '';
 		loading = true;
 		try {
 			const response = await fetch(
@@ -16,11 +23,7 @@
 					headers: {
 						'Content-Type': 'application/json'
 					},
-					body: JSON.stringify({
-						name,
-						description,
-						namingConvention
-					})
+					body: JSON.stringify(propertiesForName)
 				}
 			);
 
@@ -57,7 +60,7 @@
 		<select
 			name="name"
 			class="select select-bordered w-full max-w-xs text-lg"
-			bind:value={name}
+			bind:value={propertiesForName.name}
 		>
 			<option disabled selected
 				>What are you creating...</option
@@ -70,7 +73,7 @@
 		<select
 			name="namingConvention"
 			class="select select-bordered w-full max-w-xs text-lg"
-			bind:value={namingConvention}
+			bind:value={propertiesForName.namingConvention}
 		>
 			<option disabled selected
 				>Naming Convention</option
@@ -90,7 +93,7 @@
 		name="description"
 		class="textarea textarea-bordered lg:w-3/4 w-full text-lg"
 		placeholder="Describe what it does, or the purpose."
-		bind:value={description}
+		bind:value={propertiesForName.description}
 	/>
 
 	<button
@@ -104,11 +107,13 @@
 			Submit
 		{/if}
 	</button>
+
 	{#if error}
 		<div class="text-lg text-red-500">
 			An error occurred: {error}
 		</div>
 	{/if}
+
 	{#if res != undefined}
 		<div class="text-lg">
 			My recommendation is: {res}
