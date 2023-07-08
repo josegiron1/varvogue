@@ -18,6 +18,7 @@ export async function getChatCompletion({
 	description: string;
 	namingConvention: string;
 }) {
+	console.log('Calling getChatCompletion...');
 	console.log('getChatCompletion', {
 		name,
 		description,
@@ -27,16 +28,21 @@ export async function getChatCompletion({
 		model: 'gpt-3.5-turbo-0613',
 		messages: [
 			{
+				role: 'user',
+				content: `I'm developing a new ${name}, and I need help generating a suitable name. Here are the details:
+					Name: ${name}
+					Description: ${description}
+					Naming Convention: ${namingConvention}`
+			},
+			{
 				role: 'assistant',
-				content: `I'm developing a new ${name}, but I'm uncertain about the ideal title. Could you help generate a suitable name? Below, within the '#' delimited section, you'll find specific details:
-				# Name: ${name}
-				Description: ${description}
-				Naming Convention: ${namingConvention} #
-				Your task is to suggest a succinct, unique, single-word title following the ${namingConvention} naming convention. As a quick refresher:
-				In snake_case, words are separated by underscores (e.g., 'my_variable')
-				In camelCase, the first word is in lowercase, and the first letter of each subsequent concatenated word is capitalized (e.g., 'myVariable')
-				In PascalCase, the first letter of each concatenated word is capitalized (e.g., 'MyVariable')
-				Please bear in mind principles of clean code and an engineering perspective, emphasizing functionality, simplicity, and clarity. The response must solely consist of a single word - the proposed name.`
+				content:
+					'Based on the provided details, let me suggest a few names following the specified naming convention.'
+			},
+			{
+				role: 'system',
+				content:
+					'You are tasked to suggest a name following the specified naming convention. Please provide the list of names in the following JSON format: { list:[{"name": "suggestedName"}]}.'
 			}
 		]
 	});

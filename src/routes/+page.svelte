@@ -8,13 +8,40 @@
 		namingConvention: 'Naming Convention',
 		description: ''
 	};
-	let res: string;
+	let res: { name: string }[];
 	let loading = false;
 	let error: string;
 
 	const generateName = async () => {
 		error = '';
 		loading = true;
+
+		if (
+			propertiesForName.name ===
+			'What are you creating...'
+		) {
+			error =
+				'Please select what you are creating.';
+			loading = false;
+			return;
+		}
+
+		if (
+			propertiesForName.namingConvention ===
+			'Naming Convention'
+		) {
+			error =
+				'Please select a naming convention.';
+			loading = false;
+			return;
+		}
+
+		if (propertiesForName.description === '') {
+			error = 'Please enter a description.';
+			loading = false;
+			return;
+		}
+
 		try {
 			const response = await fetch(
 				'/api/recommendation',
@@ -33,8 +60,11 @@
 				);
 			}
 
-			const data = await response.json();
-			res = data.body.response.content;
+			let data = await response.json();
+			data = JSON.parse(
+				data.body.response.content
+			).list;
+			res = data;
 		} catch (err: any) {
 			error = err.message;
 			console.error(err);
@@ -110,13 +140,18 @@
 
 	{#if error}
 		<div class="text-lg text-red-500">
-			An error occurred: {error}
+			{error}
 		</div>
 	{/if}
 
 	{#if res != undefined}
 		<div class="text-lg">
-			My recommendation is: {res}
+			My list of recommendation:
 		</div>
+		{#each res as item}
+			<div class="text-lg">
+				{item.name}
+			</div>
+		{/each}
 	{/if}
 </div>
